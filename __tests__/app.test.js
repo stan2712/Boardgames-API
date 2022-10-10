@@ -1,6 +1,4 @@
-const { afterAll, beforeEach } = require("@jest/globals");
 const request = require("supertest");
-
 const seed = require("../db/seeds/seed");
 const db = require("../db/connection");
 const testData = require("../db/data/test-data");
