@@ -27,6 +27,66 @@ describe("/api/categories", () => {
   });
 });
 
+describe("/api/reviews/:reviews_id", () => {
+  test("Get request to reivew_id responds with correctly formatted review object", () => {
+    return request(app)
+      .get("/api/reviews/6")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(
+          expect.objectContaining({
+            review_id: expect.any(Number),
+            title: expect.any(String),
+            review_body: expect.any(String),
+            designer: expect.any(String),
+            review_img_url: expect.any(String),
+            votes: expect.any(Number),
+            category: expect.any(String),
+            owner: expect.any(String),
+            created_at: expect.any(String),
+          })
+        );
+      });
+  });
+  test("Get request to /api/reviews/8 responds with review object containing the correct info", () => {
+    return request(app)
+      .get("/api/reviews/8")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(
+          expect.objectContaining({
+            review_id: 8,
+            title: "One Night Ultimate Werewolf",
+            review_body: "We couldn't find the werewolf!",
+            designer: "Akihisa Okui",
+            review_img_url:
+              "https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+            votes: 5,
+            category: "social deduction",
+            owner: "mallionaire",
+            created_at: "2021-01-18T10:01:41.251Z",
+          })
+        );
+      });
+  });
+  test("status 404 bad request for incorrect ID number", () => {
+    return request(app)
+      .get("/api/reviews/1234")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No review corresponds to that ID number");
+      });
+  });
+  test("status 400 invalid review_id type", () => {
+    return request(app)
+      .get("/api/reviews/bestgame")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+});
+
 describe("Errors for bad paths", () => {
   test("status 404 bad request for a very bad path", () => {
     return request(app)
