@@ -28,12 +28,12 @@ describe("/api/categories", () => {
 });
 
 describe("Errors for bad paths", () => {
-    test("status 404 bad request for a very bad path", () => {
-        return request(app)
-        .get("/api/thispathdoesntexist...unless?")
-        .expect(404)
-        .then(({body}) => {
-            expect(body.msg).toBe("Page not found")
-        })
-    })
-})
+  test("status 404 bad request for a very bad path", () => {
+    return request(app)
+      .get("/api/thispathdoesntexist...unless?")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Page not found");
+      });
+  });
+});
