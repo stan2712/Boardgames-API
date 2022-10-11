@@ -3,12 +3,19 @@ const app = express();
 
 const { getCategories } = require("./controllers/categoriescontroller");
 const { getReview } = require("./controllers/reviewsIDcontroller");
+const { getUsers } = require("./controllers/usersController");
 
 app.use(express.json());
 
 app.get("/api/categories", getCategories);
 
 app.get("/api/reviews/:review_id", getReview);
+
+app.get("/api/users", getUsers);
+
+
+
+
 
 //404 wrong path
 app.all("/api/*", (req, res, next) => {

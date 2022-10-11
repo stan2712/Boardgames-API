@@ -89,6 +89,29 @@ describe("/api/reviews/:reviews_id", () => {
   });
 });
 
+describe.only("/api/users", () => {
+  test("Get request to /api/users responds with array of user objects", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toBeInstanceOf(Array);
+        expect(body.length).toBe(4);
+        body.forEach((obj) => {
+          expect(obj).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String)
+            })
+          );
+        });
+      });
+  });
+});
+
+
+
 describe("Errors for bad paths", () => {
   test("status 404 bad request for a very bad path", () => {
     return request(app)
