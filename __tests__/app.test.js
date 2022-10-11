@@ -33,6 +33,7 @@ describe("/api/reviews/:reviews_id", () => {
       .get("/api/reviews/6")
       .expect(200)
       .then(({ body }) => {
+        expect(Object.keys(body).length).toBe(9);
         expect(body).toEqual(
           expect.objectContaining({
             review_id: expect.any(Number),
@@ -53,6 +54,7 @@ describe("/api/reviews/:reviews_id", () => {
       .get("/api/reviews/8")
       .expect(200)
       .then(({ body }) => {
+        expect(Object.keys(body).length).toBe(9);
         expect(body).toEqual(
           expect.objectContaining({
             review_id: 8,
