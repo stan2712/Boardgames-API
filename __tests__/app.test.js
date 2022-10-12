@@ -33,7 +33,7 @@ describe("/api/reviews/:reviews_id", () => {
       .get("/api/reviews/6")
       .expect(200)
       .then(({ body }) => {
-        expect(Object.keys(body).length).toBe(9);
+        expect(Object.keys(body).length).toBe(10);
         expect(body).toEqual(
           expect.objectContaining({
             review_id: expect.any(Number),
@@ -45,28 +45,52 @@ describe("/api/reviews/:reviews_id", () => {
             category: expect.any(String),
             owner: expect.any(String),
             created_at: expect.any(String),
+            comment_count: expect.any(Number)
           })
         );
       });
   });
-  test("Get request to /api/reviews/8 responds with review object containing the correct info", () => {
+  test("Get request to /api/reviews/3 responds with review object containing the correct info, including comment count of 3", () => {
     return request(app)
-      .get("/api/reviews/8")
+      .get("/api/reviews/3")
       .expect(200)
       .then(({ body }) => {
-        expect(Object.keys(body).length).toBe(9);
+        expect(Object.keys(body).length).toBe(10);
         expect(body).toEqual(
           expect.objectContaining({
-            review_id: 8,
-            title: "One Night Ultimate Werewolf",
-            review_body: "We couldn't find the werewolf!",
-            designer: "Akihisa Okui",
-            review_img_url:
-              "https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-            votes: 5,
+            review_id: 3,
+            title: "Ultimate Werewolf",
             category: "social deduction",
-            owner: "mallionaire",
+            designer: "Akihisa Okui",
+            owner: "bainesface",
+            review_body: "We couldn't find the werewolf!",
+            review_img_url:
+              "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
             created_at: "2021-01-18T10:01:41.251Z",
+            votes: 5,
+            comment_count: 3,
+          })
+        );
+      });
+  });
+  test("Get request to reivew_id responds with correctly formatted review object including comment count", () => {
+    return request(app)
+      .get("/api/reviews/6")
+      .expect(200)
+      .then(({ body }) => {
+        expect(Object.keys(body).length).toBe(10);
+        expect(body).toEqual(
+          expect.objectContaining({
+            review_id: expect.any(Number),
+            title: expect.any(String),
+            review_body: expect.any(String),
+            designer: expect.any(String),
+            review_img_url: expect.any(String),
+            votes: expect.any(Number),
+            category: expect.any(String),
+            owner: expect.any(String),
+            created_at: expect.any(String),
+            comment_count: expect.any(Number),
           })
         );
       });
