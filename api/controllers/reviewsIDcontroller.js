@@ -1,4 +1,9 @@
-const { selectReview, changeReview } = require("../models/reviewsIDmodel");
+const {
+  selectReview,
+  changeReview,
+  fetchReviews,
+} = require("../models/reviewsIDmodel");
+const { fetchCategory, fetchCategoriesBySlug } = require("../models/categoriesmodel");
 
 exports.getReview = (req, res, next) => {
   selectReview(req.params.review_id)
@@ -11,7 +16,7 @@ exports.getReview = (req, res, next) => {
 };
 exports.patchReview = (req, res, next) => {
   const { review_id } = req.params;
-  const {inc_votes} = req.body
+  const { inc_votes } = req.body;
   changeReview(review_id, inc_votes)
     .then((updatedReview) => {
       res.status(200).send({ updatedReview });
@@ -21,3 +26,20 @@ exports.patchReview = (req, res, next) => {
     });
 };
 
+exports.getReviews = (req, res, next) => {
+  const {category} = req.query
+    
+  const promises = [fetchReviews(category)]
+
+  if (category) {
+    promises.push(fetchCategory(category))
+  }
+
+  Promise.all(promises)
+    .then((promisesReturn) => {
+      res.status(200).send({ reviews: promisesReturn[0] });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};

@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 const { getCategories } = require("./controllers/categoriescontroller");
-const { getReview, patchReview } = require("./controllers/reviewsIDcontroller");
+const { getReview, patchReview, getAllReviews, getReviews } = require("./controllers/reviewsIDcontroller");
 const { getUsers } = require("./controllers/usersController");
 
 app.use(express.json());
@@ -14,6 +14,8 @@ app.get("/api/reviews/:review_id", getReview);
 app.get("/api/users", getUsers);
 
 app.patch("/api/reviews/:review_id", patchReview);
+
+app.get("/api/reviews", getReviews)
 
 //404 wrong path
 app.all("/api/*", (req, res, next) => {
