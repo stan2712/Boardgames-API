@@ -45,7 +45,7 @@ describe("/api/reviews/:reviews_id", () => {
             category: expect.any(String),
             owner: expect.any(String),
             created_at: expect.any(String),
-            comment_count: expect.any(Number)
+            comment_count: expect.any(Number),
           })
         );
       });
@@ -206,6 +206,55 @@ describe("/api/reviews/:review_id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("No review corresponds to that ID number");
+      });
+  });
+});
+
+describe("/api/reviews", () => {
+  test("Sorted by date desc", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.reviews).toBeInstanceOf(Array);
+        expect(body.reviews.length).toBe(13);
+        expect(body.reviews).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+  test("Filters by category if given", () => {
+    return request(app)
+      .get(`/api/reviews?category=dexterity`)
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews).toBeSortedBy("created_at", {
+          descending: true,
+        });
+        reviews.forEach((review) => {
+          expect(review).toEqual(
+            expect.objectContaining({
+              category: "dexterity",
+            })
+          );
+        });
+      });
+  });
+  test("Returns an empty array if category contains no games", () => {
+    return request(app)
+      .get(`/api/reviews?category=children's+games`)
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews.length).toBe(0);
+      });
+  });
+  test("404 if category does not exist", () => {
+    return request(app)
+      .get("/api/reviews?category=BoringGames")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Category not found.");
       });
   });
 });

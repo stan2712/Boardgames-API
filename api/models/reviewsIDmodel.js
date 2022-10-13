@@ -39,3 +39,21 @@ exports.changeReview = (review_id, addedVotes) => {
       }
     });
 };
+
+exports.fetchReviews = (category) => {
+  const params = [];
+  let baseQuery = `SELECT reviews.*, COUNT(comments.comment_id) ::INT AS comment_count
+  FROM reviews 
+  LEFT JOIN comments ON comments.review_id=reviews.review_id`;
+
+  if (category) {
+    baseQuery += ` WHERE category=$1`;
+    params.push(category);
+  }
+
+  baseQuery += ` GROUP BY reviews.review_id ORDER BY created_at DESC;`;
+
+  return db.query(baseQuery, params).then(({ rows }) => {
+    return rows;
+  });
+};
