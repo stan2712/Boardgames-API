@@ -13,7 +13,7 @@ describe("/api/categories", () => {
       .get("/api/categories")
       .expect(200)
       .then(({ body }) => {
-        expect(reviews).toBeInstanceOf(Array);
+        expect(body).toBeInstanceOf(Array);
         expect(body.length).toBe(4);
         body.forEach((obj) => {
           expect(obj).toEqual(
@@ -210,8 +210,8 @@ describe("/api/reviews/:review_id", () => {
   });
 });
 
-describe.only("/api/reviews", () => {
-  test("Get request returns array of review objects sorted in by date desc", () => {
+describe("/api/reviews", () => {
+  test("Sorted by date desc", () => {
     return request(app)
       .get("/api/reviews")
       .expect(200)
@@ -220,21 +220,6 @@ describe.only("/api/reviews", () => {
         expect(body.reviews.length).toBe(13);
         expect(body.reviews).toBeSortedBy("created_at", {
           descending: true,
-        });
-        body.reviews.forEach((review) => {
-          expect(review).toEqual(
-            expect.objectContaining({
-              review_id: expect.any(Number),
-              title: expect.any(String),
-              review_body: expect.any(String),
-              designer: expect.any(String),
-              review_img_url: expect.any(String),
-              votes: expect.any(Number),
-              category: expect.any(String),
-              owner: expect.any(String),
-              created_at: expect.any(String),
-            })
-          );
         });
       });
   });
