@@ -259,6 +259,51 @@ describe("/api/reviews", () => {
   });
 });
 
+describe("/api/reviews/:review_id/comments", () => {
+  test("Correct array of objects sorted by comments.created_at desc", () => {
+    return request(app)
+      .get("/api/reviews/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        // console.log(comments, "test 1")
+        expect(body.comments).toBeInstanceOf(Array);
+        expect(body.comments.length).toBe(3);
+        expect(body.comments).toBeSortedBy("created_at", {
+          descending: true,
+        });
+        body.comments.forEach((comments) => {
+          expect(Object.keys(comments).length).toBe(6);
+          expect(comments).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              review_id: expect.any(Number),
+            })
+          );
+        });
+      });
+  });
+  test("Returns an empty array if review_id has no comments", () => {
+    return request(app)
+      .get(`/api/reviews/5/comments`)
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(comments.length).toBe(0);
+      });
+  });
+  test("404 if review_id doesnt exist", () => {
+    return request(app)
+      .get(`/api/reviews/555/comments`)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No review corresponds to that ID number");
+      });
+  });
+});
+
 describe("Errors for bad paths", () => {
   test("status 404 bad request for a very bad path", () => {
     return request(app)

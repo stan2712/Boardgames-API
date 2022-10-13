@@ -1,6 +1,7 @@
 const db = require("../../db/connection");
 
 exports.selectReview = (ID) => {
+ 
   return db
     .query(
       `SELECT reviews.*, COUNT(comments.comment_id) ::INT AS comment_count
@@ -54,6 +55,18 @@ exports.fetchReviews = (category) => {
   baseQuery += ` GROUP BY reviews.review_id ORDER BY created_at DESC;`;
 
   return db.query(baseQuery, params).then(({ rows }) => {
+    return rows;
+  });
+};
+
+
+exports.fetchComments = (ID) => {
+
+  let baseQuery = `SELECT * FROM comments
+  WHERE review_id = $1
+  ORDER BY created_at DESC`;
+
+  return db.query(baseQuery, [ID]).then(({ rows }) => {
     return rows;
   });
 };
