@@ -14,7 +14,7 @@ exports.fetchCategory = (category) => {
 
   return db.query(queryStr, [category]).then(({ rows }) => {
     if (rows.length === 0) {
-      return Promise.reject({status: 404, msg: "Category not found."})
+      return Promise.reject({status: 400, msg: "Invalid query"})
     }
     return rows;
   });

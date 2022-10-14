@@ -28,9 +28,8 @@ exports.patchReview = (req, res, next) => {
 };
 
 exports.getReviews = (req, res, next) => {
-  const { category } = req.query;
-
-  const promises = [fetchReviews(category)];
+  const { category, sortBy, order } = req.query;
+  const promises = [fetchReviews(category, sortBy, order)];
 
   if (category) {
     promises.push(fetchCategory(category));
@@ -50,10 +49,9 @@ exports.getReviewComments = (req, res, next) => {
 
   const promises = [selectReview(review_id), fetchComments(review_id)];
 
-
   Promise.all(promises)
     .then((promisesReturn) => {
-      res.status(200).send({ comments: promisesReturn[1]});
+      res.status(200).send({ comments: promisesReturn[1] });
     })
     .catch((err) => {
       next(err);
