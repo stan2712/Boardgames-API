@@ -88,3 +88,25 @@ exports.fetchComments = (ID) => {
     return rows;
   });
 };
+
+exports.addComments = (review_id, { username, body }) => {
+  return db
+    .query(
+      `INSERT INTO comments
+      (review_id, body, author )
+      VALUES
+      ($1, $2, $3)
+      RETURNING*`,
+      [review_id, body, username]
+    )
+    .then(({ rows: comment }) => {
+      if (comment) {
+        return comment[0];
+      } else {
+        return Promise.reject({
+          status: 404,
+          msg: "No review corresponds to that ID number",
+        });
+      }
+    });
+};

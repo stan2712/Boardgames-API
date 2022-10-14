@@ -355,6 +355,64 @@ describe("/api/reviews/:review_id/comments", () => {
   });
 });
 
+describe("/api/reviews/2/comments", () => {
+  test("Post request to /api/reviews/2/comments correctly adds new comment with correct info", () => {
+    return request(app)
+      .post("/api/reviews/2/comments")
+      .send({
+        username: "mallionaire",
+        body: "What a great comment",
+      })
+      .expect(201)
+      .then(({ body: comment }) => {
+        expect(Object.keys(comment).length).toBe(6);
+        expect(comment).toEqual(
+          expect.objectContaining({
+            review_id: 2,
+            author: "mallionaire",
+            body: "What a great comment",
+            comment_id: 7,
+            created_at: expect.any(String),
+            votes: 0,
+          })
+        );
+      });
+  });
+  test("400 if ID doesn't exist", () => {
+    return request(app)
+      .post(`/api/reviews/idiot/comments`)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("404 if username doesnt exist", () => {
+    return request(app)
+      .post("/api/reviews/3/comments")
+      .send({
+        username: "karen",
+        body: "i hate games",
+      })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+
+  test("400 if posted comment is incorrect", () => {
+    return request(app)
+      .post("/api/reviews/3/comments")
+      .send({
+        gameshater: "karen",
+        complaint: "i hate games",
+      })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+});
+
 describe("Errors for bad paths", () => {
   test("status 404 bad request for a very bad path", () => {
     return request(app)
