@@ -30,5 +30,81 @@
         }
       ]
     }
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "philippaclaire9",
+          "name": "philippa",
+          "avatar_url": "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4"
+        }
+      ]
+    }
+  },
+  "GET /api/reviews/:review_id": {
+    "description:": "Get request to review_id responds with correctly formatted review object",
+
+    "exampleResponse": {
+      "review_id": 3,
+      "title": "Ultimate Werewolf",
+      "category": "social deduction",
+      "designer": "Akihisa Okui",
+      "owner": "bainesface",
+      "review_body": "We couldn't find the werewolf!",
+      "review_img_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+      "created_at": "2021-01-18T10:01:41.251Z",
+      "votes": 5,
+      "comment_count": 3
+    }
+  },
+  "PATCH /api/reviews/:review_id": {
+    "description": "Patch request to /api/reviews/:review_id, for example correctly increments vote count and returns correct object",
+
+    "req.body example": "{inc_votes: 10} increments vote count by 10",
+
+    "exampleResponse": {
+      "review_id": 3,
+      "title": "Ultimate Werewolf",
+      "category": "social deduction",
+      "designer": "Akihisa Okui",
+      "owner": "bainesface",
+      "review_body": "We couldn't find the werewolf!",
+      "review_img_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+      "created_at": "2021-01-18T10:01:41.251Z",
+      "votes": 15,
+      "comment_count": 3
+    }
+  },
+  "GET /api/reviews/:review_id/comments": {
+    "description": "returns array of all comments with review_id",
+    "exampleResponse": {
+      "comment_id": 4,
+      "votes": "16",
+      "created_at": "2017-11-22 12:36:03.389",
+      "author": "bainesface",
+      "body": "EPIC board game!",
+      "review_id": 2
+    }
+  },
+  "Post /api/reviews/:review_id/comments": {
+    "description": "",
+    "req.body example": {
+      "username": "mallionaire",
+      "body": "What a great comment"
+    },
+    "exampleResponse": {
+      "comment_id": 7,
+      "votes": 0,
+      "created_at": "2017-11-22 12:36:03.389",
+      "author": "mallionaire",
+      "body": "What a great comment!",
+      "review_id": 2
+    }
+  },
+  "Delete /api/comments/comments_id": {
+    "description": "deletes comment associated with comment_id",
+    "exampleResponse": "status:204"
   }
 }

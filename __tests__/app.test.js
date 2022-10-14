@@ -3,6 +3,7 @@ const seed = require("../db/seeds/seed");
 const db = require("../db/connection");
 const testData = require("../db/data/test-data");
 const app = require("../api/app");
+const endpointsguide = require("../endpoints.json")
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -426,6 +427,18 @@ describe("/api/comments/comment_id", () => {
       });
   })
 });
+
+describe.only("get api", () => {
+  test("/api returns endpoints file", () => {
+    return request(app)
+    .get("/api")
+    .expect(200)
+    .then(({body: {endpoints}}) => {
+      console.log(endpoints)
+      expect(endpoints).toEqual(endpointsguide)
+    })
+  })
+})
 
 describe("Errors for bad paths", () => {
   test("status 404 bad request for a very bad path", () => {
