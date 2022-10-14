@@ -4,22 +4,29 @@ const app = express();
 const { getCategories } = require("./controllers/categoriescontroller");
 const { getReview, patchReview, getReviewComments, getReviews, postComment } = require("./controllers/reviewsIDcontroller");
 const { getUsers } = require("./controllers/usersController");
+const { deleteComment } = require("./controllers/commentsController")
+const endpoints = require("../endpoints.json")
 
 app.use(express.json());
 
-app.get("/api/categories", getCategories);
+app.get("/api", (req,res) => {
+    res.status(200).send({endpoints})
+})
+app.get("/api/categories", getCategories); //
 
-app.get("/api/reviews/:review_id", getReview);
+app.get("/api/reviews/:review_id", getReview); //
 
-app.get("/api/users", getUsers);
+app.get("/api/users", getUsers); //
 
-app.patch("/api/reviews/:review_id", patchReview);
+app.patch("/api/reviews/:review_id", patchReview); //
 
-app.get("/api/reviews", getReviews)
+app.get("/api/reviews", getReviews) //
 
-app.get("/api/reviews/:review_id/comments", getReviewComments)
+app.get("/api/reviews/:review_id/comments", getReviewComments) //
 
-app.post("/api/reviews/:review_id/comments", postComment)
+app.post("/api/reviews/:review_id/comments", postComment) //
+
+app.delete("/api/comments/:comment_id", deleteComment) //
 
 
 //404 wrong path

@@ -3,6 +3,7 @@ const seed = require("../db/seeds/seed");
 const db = require("../db/connection");
 const testData = require("../db/data/test-data");
 const app = require("../api/app");
+const endpointsguide = require("../endpoints.json")
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -412,6 +413,32 @@ describe("/api/reviews/2/comments", () => {
       });
   });
 });
+
+describe("/api/comments/comment_id", () => {
+  test("Deletes the comment corresponding with given comment_id", () => {
+    return request(app).delete("/api/comments/3").expect(204);
+  });
+  test("404 if comment_id doesnt exist", () => {
+    return request(app)
+      .delete("/api/comments/2222")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("ID not found");
+      });
+  })
+});
+
+describe.only("get api", () => {
+  test("/api returns endpoints file", () => {
+    return request(app)
+    .get("/api")
+    .expect(200)
+    .then(({body: {endpoints}}) => {
+      console.log(endpoints)
+      expect(endpoints).toEqual(endpointsguide)
+    })
+  })
+})
 
 describe("Errors for bad paths", () => {
   test("status 404 bad request for a very bad path", () => {
