@@ -4,6 +4,7 @@ const app = express();
 const { getCategories } = require("./controllers/categoriescontroller");
 const { getReview, patchReview, getReviewComments, getReviews, postComment } = require("./controllers/reviewsIDcontroller");
 const { getUsers } = require("./controllers/usersController");
+const { deleteComment } = require("./controllers/commentsController")
 
 app.use(express.json());
 
@@ -20,6 +21,8 @@ app.get("/api/reviews", getReviews)
 app.get("/api/reviews/:review_id/comments", getReviewComments)
 
 app.post("/api/reviews/:review_id/comments", postComment)
+
+app.delete("/api/comments/:comment_id", deleteComment)
 
 
 //404 wrong path

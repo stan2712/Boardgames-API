@@ -413,6 +413,20 @@ describe("/api/reviews/2/comments", () => {
   });
 });
 
+describe("/api/comments/comment_id", () => {
+  test("Deletes the comment corresponding with given comment_id", () => {
+    return request(app).delete("/api/comments/3").expect(204);
+  });
+  test("404 if comment_id doesnt exist", () => {
+    return request(app)
+      .delete("/api/comments/2222")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("ID not found");
+      });
+  })
+});
+
 describe("Errors for bad paths", () => {
   test("status 404 bad request for a very bad path", () => {
     return request(app)
