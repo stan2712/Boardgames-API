@@ -3,6 +3,7 @@ const {
   changeReview,
   fetchComments,
   fetchReviews,
+  addComments,
 } = require("../models/reviewsIDmodel");
 const { fetchCategory } = require("../models/categoriesmodel");
 
@@ -50,10 +51,22 @@ exports.getReviewComments = (req, res, next) => {
 
   const promises = [selectReview(review_id), fetchComments(review_id)];
 
-
   Promise.all(promises)
     .then((promisesReturn) => {
-      res.status(200).send({ comments: promisesReturn[1]});
+      res.status(200).send({ comments: promisesReturn[1] });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.postComment = (req, res, next) => {
+  const { review_id } = req.params;
+  const body = req.body;
+
+  addComments(review_id, body)
+    .then((comment) => {
+      res.status(201).send(comment);
     })
     .catch((err) => {
       next(err);
