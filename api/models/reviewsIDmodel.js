@@ -40,7 +40,28 @@ exports.changeReview = (review_id, addedVotes) => {
     });
 };
 
-exports.fetchReviews = (category) => {
+exports.fetchReviews = (category, sortBy = "created_at", order = "DESC") => {
+  //is this greenlisting?
+  const greenlistingSortBy = ["ASC", "DESC"];
+  const greenlistingQueries = [
+    "owner",
+    "title",
+    "review_id",
+    "category",
+    "review_img_url",
+    "created_at",
+    "votes",
+    "designer",
+    "comment_count",
+  ];
+
+  if (
+    !greenlistingQueries.includes(sortBy) ||
+    !greenlistingSortBy.includes(order)
+  ) {
+    return Promise.reject({ status: 400, msg: "Invalid query" });
+  }
+
   const params = [];
   let baseQuery = `SELECT reviews.*, COUNT(comments.comment_id) ::INT AS comment_count
   FROM reviews 
@@ -51,7 +72,7 @@ exports.fetchReviews = (category) => {
     params.push(category);
   }
 
-  baseQuery += ` GROUP BY reviews.review_id ORDER BY created_at DESC;`;
+  baseQuery += ` GROUP BY reviews.review_id ORDER BY ${sortBy} ${order}`;
 
   return db.query(baseQuery, params).then(({ rows }) => {
     return rows;
