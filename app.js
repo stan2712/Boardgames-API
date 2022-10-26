@@ -9,6 +9,18 @@ const endpoints = require("./endpoints.json")
 
 app.use(express.json());
 
+app.get('/', (req, res, next) => {
+
+  res.status(200).json({
+      status: 'success',
+      data: {
+          name: 'name of your app',
+          version: '0.1.0'
+      }
+  });
+
+});
+
 app.get("/api", (req,res) => {
     res.status(200).send({endpoints})
 })
