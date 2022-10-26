@@ -5,7 +5,7 @@ const { getCategories } = require("./controllers/categoriescontroller");
 const { getReview, patchReview, getReviewComments, getReviews, postComment } = require("./controllers/reviewsIDcontroller");
 const { getUsers } = require("./controllers/usersController");
 const { deleteComment } = require("./controllers/commentsController")
-const endpoints = require("../endpoints.json")
+const endpoints = require("./endpoints.json")
 
 app.use(express.json());
 
