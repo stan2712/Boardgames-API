@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors');
 const app = express();
 
 const { getCategories } = require("./controllers/categoriescontroller");
@@ -8,6 +9,8 @@ const { deleteComment } = require("./controllers/commentsController")
 const endpoints = require("./endpoints.json")
 
 app.use(express.json());
+
+app.use(cors());
 
 app.get('/', (req, res, next) => {
 
