@@ -2,7 +2,7 @@ const request = require("supertest");
 const seed = require("../db/seeds/seed");
 const db = require("../db/connection");
 const testData = require("../db/data/test-data");
-const app = require("../api/app");
+const app = require("../app")
 const endpointsguide = require("../endpoints.json")
 
 beforeEach(() => seed(testData));
@@ -416,19 +416,19 @@ describe("/api/reviews/2/comments", () => {
 
 describe("/api/comments/comment_id", () => {
   test("Deletes the comment corresponding with given comment_id", () => {
-    return request(app).delete("/api/comments/3").expect(204);
+    return request(app).delete("/api/comments/1").expect(204);
   });
   test("404 if comment_id doesnt exist", () => {
     return request(app)
       .delete("/api/comments/2222")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("ID not found");
+        expect(body.msg).toBe("ID not found. RE-submit request with a valid ID");
       });
   })
 });
 
-describe.only("get api", () => {
+describe("get api", () => {
   test("/api returns endpoints file", () => {
     return request(app)
     .get("/api")

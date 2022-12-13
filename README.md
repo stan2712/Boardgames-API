@@ -1,5 +1,13 @@
 # Northcoders House of Games API
 
-## Connect to Databases
+## Hello!
 
-In order to connect to the databases a .env.test or a .env.development file will need to be created. Into either, add PGDATABASE=<database_name_here>, with the correct database name for that environment (see /db/setup.sql for the database names). Double check that these .env files are .gitignored.
+This is the back-end project that I wrote while at the Northcoders bootcamp. The endpoint guide can be found here:
+
+https://stans-games.cyclic.app/api
+
+Originally was hosted with Heroku but as they discontinued their free service I have migrated to using ElephantSQL and Cyclic.
+
+## Project Summary
+
+Creates an API allowing access to data using express request paths, using MVC. 
